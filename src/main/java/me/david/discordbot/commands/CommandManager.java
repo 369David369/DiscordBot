@@ -19,6 +19,7 @@ public class CommandManager {
         commands.add(new Uptime());
         commands.add(new Avater());
         commands.add(new JokeCount());
+        commands.add(new Music());
     }
 
     public Command getCommandbyNameorAlias(String name){
