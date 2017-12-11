@@ -3,6 +3,7 @@ package me.david.discordbot.audio;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import me.david.discordbot.Cons;
@@ -32,7 +33,10 @@ public class GuildPlayer extends AudioEventAdapter {
     }
 
     public void nextTrack() {
-        if(queue.isEmpty()) stopPlayer();
+        if(queue.isEmpty()) {
+            stopPlayer();
+            tc.sendMessage("Queued empty!").queue();
+        }
         else {
             player.startTrack(queue.peek().getTrack(), false);
             now = queue.poll();
@@ -48,6 +52,22 @@ public class GuildPlayer extends AudioEventAdapter {
         now = track;
     }
 
+    public void queue(AudioPlaylist playlist, User user) {
+        if(playlist.getTracks().isEmpty()){
+            tc.sendMessage("Playlist im empty!").queue();
+            return;
+        }
+        for(AudioTrack track : playlist.getTracks()) {
+            Track newtrack = new Track(track, user);
+            if (!player.startTrack(track, true)) {
+                queue.offer(newtrack);
+                continue;
+            }
+            now = newtrack;
+        }
+        tc.sendMessage("Loaded Playlist with " + playlist.getTracks().size() + " tracks!").queue();
+    }
+
     public void play(String link, User author) {
         Matcher m = Cons.URL_PATTERN.matcher(link);
         if(m.find()){
@@ -56,6 +76,11 @@ public class GuildPlayer extends AudioEventAdapter {
                     @Override
                     public void trackLoaded(AudioTrack track) {
                         queue(new Track(track, author));
+                    }
+
+                    @Override
+                    public void playlistLoaded(AudioPlaylist playlist) {
+                        queue(playlist, author);
                     }
                 }).get();
             } catch (InterruptedException | ExecutionException e) {
@@ -66,12 +91,13 @@ public class GuildPlayer extends AudioEventAdapter {
         }
     }
 
-    public GuildPlayer connect(VoiceChannel vc) {
+    public boolean connect(VoiceChannel vc) {
+        if(getVc() != null && vc.getId().equals(getVc().getId())) return false;
         setVc(vc);
         AudioManager am = vc.getGuild().getAudioManager();
         am.setAutoReconnect(true);
         am.openAudioConnection(vc);
-        return this;
+        return true;
     }
 
     public GuildPlayer disconnect() {
@@ -83,6 +109,11 @@ public class GuildPlayer extends AudioEventAdapter {
         if(now == null) return;
         if(player.isPaused()) player.setPaused(false);
         else player.setPaused(true);
+    }
+
+    public void setPaused(boolean paused){
+        if(now == null) return;
+        player.setPaused(paused);
     }
 
     public void jump(long position) {

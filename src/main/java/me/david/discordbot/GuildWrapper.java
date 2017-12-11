@@ -27,6 +27,7 @@ public class GuildWrapper {
         this.guildId = guildId;
         player = DiscordBot.instance.audiomanager.createPlayer();
         guildPlayer = new GuildPlayer(player, tc);
+        player.addListener(guildPlayer);
     }
 
     public SendHandler getSendHandler() {

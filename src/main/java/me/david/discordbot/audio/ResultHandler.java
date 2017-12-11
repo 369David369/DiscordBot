@@ -17,13 +17,8 @@ public abstract class ResultHandler implements AudioLoadResultHandler {
         this.tc = scheduler.getTc();
     }
 
-    @Override
-    public abstract void trackLoaded(AudioTrack track);
-
-    @Override
-    public void playlistLoaded(AudioPlaylist playlist) {
-        tc.sendMessage("PlayerLists currently not Supportet!").queue();
-    }
+    @Override public abstract void trackLoaded(AudioTrack track);
+    @Override public abstract void playlistLoaded(AudioPlaylist playlist);
 
     @Override
     public void noMatches() {

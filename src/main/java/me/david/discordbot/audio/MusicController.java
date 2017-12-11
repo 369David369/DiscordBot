@@ -13,7 +13,7 @@ public class MusicController {
     public static void connect(CommandContext context) {
         try {
             GuildWrapper guild = DiscordBot.instance.getGuild(context.server);
-            AudioPlayer player = DiscordBot.instance.getPlayer(context.server).getPlayer();
+            GuildPlayer player = DiscordBot.instance.getPlayer(context.server);
             VoiceChannel vc = context.user.getVoiceState().getChannel();
             Member self = context.server.getSelfMember();
 
@@ -21,11 +21,8 @@ public class MusicController {
                 context.channel.sendMessage("You must connect to a voice channel first!").queue();
                 return;
             }
-            if(self.getVoiceState().inVoiceChannel()
-                    && !self.getVoiceState().getChannel().getId().equals(vc.getId())
-                    && player.getPlayingTrack() != null
-                    && !player.isPaused() ) {
-                context.channel.sendMessage(" Already playing songs!").queue();
+            if(self.getVoiceState().inVoiceChannel() && !vc.getId().equals(self.getVoiceState().getChannel().getId()) && player.isPlaying()) {
+                context.channel.sendMessage("Already playing songs!").queue();
                 return;
             }
             if(vc.getUserLimit() != 0 &&
@@ -36,13 +33,12 @@ public class MusicController {
 
             guild.tc = context.channel;
             guild.vc = vc;
-            guild.guildPlayer.connect(vc);
-
+            if(guild.guildPlayer.connect(vc)){
+                context.channel.sendMessage("Joined Voice Channel!").queue();
+            }
         } catch (PermissionException pe) {
             context.channel.sendMessage("I don't have the access to join!").queue();
-            return;
         }
-        context.channel.sendMessage("Joined Voice Channel!").queue();
     }
 
     public static void disconnect(CommandContext context) {

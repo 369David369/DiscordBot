@@ -16,7 +16,7 @@ import java.util.logging.Level;
 
 public class DiscordBot implements Runnable {
 
-    private MLogger logger;
+    public MLogger logger;
     public final long START_TIME = System.currentTimeMillis();
     public final String prefix;
     public static DiscordBot instance;

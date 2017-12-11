@@ -46,7 +46,12 @@ public class Shard {
         for(Guild g : jda.getGuilds()) {
             GuildWrapper newGuild = new GuildWrapper(jda, g.getId());
             guilds.put(g.getId(), newGuild);
+            g.getAudioManager().setSendingHandler(newGuild.getSendHandler());
         }
+        updateguidls();
+    }
+
+    public void updateguidls(){
         jda.getPresence().setGame(Game.playing(guilds.size() + " Guilds!"));
     }
 
