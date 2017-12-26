@@ -9,4 +9,5 @@ public final class Cons {
 
     public static final Pattern URL_PATTERN = Pattern.compile("^(https?|ftp)://([A-Za-z0-9-._~/?#\\\\[\\\\]:!$&'()*+,;=]+)$");
 
+
 }

@@ -116,7 +116,7 @@ local.properties
 # STS (Spring Tool Suite)
 .springBeans
 
-/me/david/discordbot/constants/PrivateCons.java
+/config.yaml
 
 # Code Recommenders
 .recommenders/

@@ -1,7 +1,11 @@
 package me.david.discordbot.constants;
 
-public class PrivateCons {
+import me.david.discordbot.yaml.YamlConfiguration;
 
-    public static final String AUTH_TOKEN = "Mzg5Mzg0NDM5Mzg3NTIxMDI2.DSRXpA.JWU0Hzv24QZ24Oz3bvTSXslpvVU";
+import java.io.File;
+
+public final class PrivateCons {
+
+    public static final String AUTH_TOKEN = YamlConfiguration.loadConfiguration(new File("config.yaml")).getString("token");
 
 }
