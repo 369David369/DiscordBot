@@ -5,6 +5,8 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import me.david.discordbot.audio.GuildPlayer;
 import me.david.discordbot.commands.CommandManager;
+import me.david.discordbot.constants.Cons;
+import me.david.discordbot.constants.PrivateCons;
 import me.david.discordbot.database.AsyncDatabaseConnection;
 import me.david.discordbot.database.DatabaseConnection;
 import me.david.discordbot.logger.MLogger;
@@ -42,7 +44,7 @@ public class DiscordBot implements Runnable {
         startmusic();
         connection = new DatabaseConnection("localhost", 27017);
         asyncconnection = new AsyncDatabaseConnection(connection);
-        shards.add(new Shard(0, Cons.TOKEN));
+        shards.add(new Shard(0, PrivateCons.AUTH_TOKEN));
         Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
 

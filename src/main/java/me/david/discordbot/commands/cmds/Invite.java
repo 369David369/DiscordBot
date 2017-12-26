@@ -1,6 +1,6 @@
 package me.david.discordbot.commands.cmds;
 
-import me.david.discordbot.Cons;
+import me.david.discordbot.constants.Cons;
 import me.david.discordbot.commands.Command;
 import me.david.discordbot.commands.CommandContext;
 

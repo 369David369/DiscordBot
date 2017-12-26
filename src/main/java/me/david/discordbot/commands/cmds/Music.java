@@ -77,7 +77,7 @@ public class Music extends Command {
                     break;
                 default:
                     MusicController.connect(context);
-                    player.play(context.args[0], context.getUser());
+                    player.play(context.args[0], context.getUser(), true);
                     break;
             }
         else if(context.args.length == 2)
@@ -106,9 +106,12 @@ public class Music extends Command {
                     }
                     break;
                 default:
-                    error(context);
+                    MusicController.connect(context);
+                    player.play(context.argstring, context.getUser(), true);
                     break;
             }
-        else error(context);
+        else {
+            MusicController.connect(context);
+            player.play(context.argstring, context.getUser(), true);}
     }
 }

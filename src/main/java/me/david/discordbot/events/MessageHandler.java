@@ -1,6 +1,6 @@
 package me.david.discordbot.events;
 
-import me.david.discordbot.Cons;
+import me.david.discordbot.constants.Cons;
 import me.david.discordbot.DiscordBot;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Member;

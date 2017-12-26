@@ -53,4 +53,8 @@ public final class StringUtil {
         count += hours*60*60*1000;
         return count;
     }
+
+    public static boolean isEmty(String str){
+        return str == null || str.equals("") || str.equals(" ");
+    }
 }

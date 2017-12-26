@@ -6,8 +6,9 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import me.david.discordbot.Cons;
+import me.david.discordbot.constants.Cons;
 import me.david.discordbot.DiscordBot;
+import me.david.discordbot.util.StringUtil;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.VoiceChannel;
@@ -68,7 +69,7 @@ public class GuildPlayer extends AudioEventAdapter {
         tc.sendMessage("Loaded Playlist with " + playlist.getTracks().size() + " tracks!").queue();
     }
 
-    public void play(String link, User author) {
+    public void play(String link, User author, boolean retry) {
         Matcher m = Cons.URL_PATTERN.matcher(link);
         if(m.find()){
             try {
@@ -87,7 +88,17 @@ public class GuildPlayer extends AudioEventAdapter {
                 e.printStackTrace();
             }
         } else {
-            tc.sendMessage("No match found.").queue();
+            if(!retry){
+                tc.sendMessage("Error with Keyword!").queue();
+                return;
+            }
+            String keyword = MusicSearcher.getUrlbyKeyword(link);
+            if(StringUtil.isEmty(keyword)) {
+                tc.sendMessage("No match found.").queue();
+                return;
+            }
+            tc.sendMessage("Music Shoosen by Keyword!").queue();
+            play(keyword, author, false);
         }
     }
 
